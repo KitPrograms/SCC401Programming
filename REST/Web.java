@@ -17,7 +17,7 @@ class HTTPRequest {
 		}
 	}
 
-public class Web {
+public class Web implements iWeb{
 	
 	static int RESPONSE_OK = 200;
 	static int RESPONSE_NOT_FOUND = 404;
@@ -25,11 +25,13 @@ public class Web {
 	
 	FormMultipart formParser = new FormMultipart();
 	
+
+	// Sends HTML requests back to the connection
 	private void sendResponse(OutputStream output, int responseCode, String contentType, byte content[])
 		{
 		try {
 			output.write(new String("HTTP/1.1 " + responseCode + "\r\n").getBytes());
-			output.write("Server: Kitten Server\r\n".getBytes());
+			output.write("Server: Kit's Server\r\n".getBytes());
 			if (content != null) output.write(new String("Content-length: " + content.length + "\r\n").getBytes());
 			if (contentType != null) output.write(new String("Content-type: " + contentType + "\r\n").getBytes());
 			output.write(new String("Connection: close\r\n").getBytes());
@@ -43,36 +45,75 @@ public class Web {
 			}
 		}
 	
-	//example of a simple HTML page
-	void page_index(OutputStream output)
+	// initally loaded page when visiting the web server 
+	void page_home(OutputStream output)
 		{
-		sendResponse(output, RESPONSE_OK, "text/html", "<html>Hello!</html>".getBytes());
+			// Should include description of different types of tasks, what they do, then link to either upload or get results
+
+			String response = """
+					<html>
+					<head></head>
+					<body></body>
+					</html>
+					""";
+					
+			sendResponse(output, RESPONSE_OK, "text/html", response.getBytes());
 		}
 	
-	//example of a form to fill in, which triggers a POST request when the user clicks submit on the form
-	void page_upload(OutputStream output)
+	// page to upload tasks
+	void page_taskUpload(OutputStream output)
 		{
-		String response = "";
-		response = response + "<html>";
-		response = response + "<body>";
-		response = response + "<form action=\"/upload_do\" method=\"POST\" enctype=\"multipart/form-data\">";
-		response = response + "<input type=\"text\" name=\"name\" placeholder=\"File name\" required/>";
-		response = response + "<input type=\"file\" name=\"content\" required/>";
-		response = response + "<input type=\"submit\" name=\"submit\"/>";
-		response = response + "</form>";
-		response = response + "</body>";
-		response = response + "</html>";
+			// includes a form to fill out to submit the task wanting to complete, upon submission, should include either link to next page or confirmation message
+
+			String response = """
+				<html>
+				<head></head>
+				<body></body>
+				</html>
+				""";
 		
-		sendResponse(output, RESPONSE_OK, "text/html", response.getBytes());
+			sendResponse(output, RESPONSE_OK, "text/html", response.getBytes());
+		}
+
+	// page to check on task completion
+	void page_statusCheck(OutputStream output)
+		{
+			// includes list of submitted tasks, and their status of ongoing, pending, completed, completed tasks should contain a link to result download
+
+			String response = """
+				<html>
+				<head></head>
+				<body></body>
+				</html>
+				""";
+		
+			sendResponse(output, RESPONSE_OK, "text/html", response.getBytes());
+		}
+
+	// page to get results from a specific task
+	void page_downloadResults(OutputStream output)
+		{
+			String response = """
+				<html>
+				<head></head>
+				<body></body>
+				</html>
+				""";
+		
+			sendResponse(output, RESPONSE_OK, "text/html", response.getBytes());
 		}
 	
 	//this function maps GET requests onto functions / code which return HTML pages
 	void get(HTTPRequest request, OutputStream output)
 		{
 		if (request.resource.equals("/"))
-			page_index(output);
+			page_home(output);
 			else if (request.resource.equals("/upload"))
-			page_upload(output);
+			page_taskUpload(output);
+			else if (request.resource.equals("/status"))
+			page_statusCheck(output);
+			else if (request.resource.equals("/upload"))
+			page_downloadResults(output);
 			else
 			sendResponse(output, RESPONSE_NOT_FOUND, null, null);
 		}

@@ -10,7 +10,7 @@ class Store{
 	byte[] value;
 	}
 
-public class ChordNode implements Runnable{
+public class ChordNode implements Runnable, iChordNode{
 	
 	static final int KEY_BITS = 8;
 	
