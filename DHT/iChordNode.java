@@ -1,3 +1,3 @@
-public class iChordNode {
+public interface iChordNode {
     
 }
