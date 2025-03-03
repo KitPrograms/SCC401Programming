@@ -1,5 +1,7 @@
 // Interface set up so that functions can be called for the webpage over RMI
 
-public interface iWeb {
+import java.rmi.Remote;
+
+public interface iWeb extends Remote{
     
 }

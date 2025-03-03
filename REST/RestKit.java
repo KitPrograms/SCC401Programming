@@ -17,6 +17,7 @@ public class RestKit {
 	
 	static Web web = new Web();
 	
+	
 	//this function read and parses a HTTP request from its text format into a HTTPRequest object
 	static HTTPRequest parseRequest(InputStream input) throws IOException
 		{

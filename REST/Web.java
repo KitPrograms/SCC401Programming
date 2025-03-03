@@ -1,4 +1,9 @@
 import java.io.*;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 
 class HTTPRequest {
 	RequestType type;
@@ -24,6 +29,19 @@ public class Web implements iWeb{
 	static int RESPONSE_SERVER_ERROR = 501;
 	
 	FormMultipart formParser = new FormMultipart();
+
+	public Web(){
+		try {
+   			String name = "myserver";
+   			iWeb stub = (iWeb) UnicastRemoteObject.exportObject(this, 0);
+   			Registry registry = LocateRegistry.createRegistry(1099);
+   			registry.rebind(name, stub);
+   			System.out.println("Server ready");
+  		} catch (Exception e) {
+   			System.err.println("Exception:");
+   			e.printStackTrace();
+  		}
+	}
 	
 
 	// Sends HTML requests back to the connection
